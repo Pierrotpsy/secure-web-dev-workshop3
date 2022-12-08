@@ -4,6 +4,10 @@
 const router = require('express').Router()
 const locationsService = require('./locations.service')
 
+router.get('/', (req, res, next) => {
+    res.send('Hello World!');
+}); 
+
 router.get('/locations', (req, res) => {
 	return res.status(200).send({locations: []})
 })
