@@ -2,9 +2,10 @@
 // Business-Logic layer
 
 const router = require('express').Router()
-const locationsService = require('./locations.service')
-
-
+const locationsService = require('./locations.service');
+const passport = require("passport");
+const AuthStrategy = require('../passport-strat/AuthStrategy');
+passport.use('auth', AuthStrategy);
 //
 // Business logic tested using Postman
 //
@@ -17,7 +18,7 @@ router.get('/', (req, res) => {
 
 // /GET for /locations --> get all the locations 
 // http://localhost:3000/locations
-router.get('/locations', async (req, res) => {
+router.get('/locations', passport.authenticate('auth',{session: false, failureMessage: true}), async (req, res) => {
     try {
         const loc = await locationsService.getAllLocations()
         return res.status(200).send(loc)
@@ -32,7 +33,7 @@ router.get('/locations', async (req, res) => {
 // /GET for /locations with /:id path variable --> get the matching location
 // http://localhost:3000/locations/:id
 // id = 63924e75df0409fce6781588
-router.get('/locations/:id', async (req, res) => {
+router.get('/locations/:id', passport.authenticate('auth',{session: false, failureMessage: true}), async (req, res) => {
     try {
         const loc = await locationsService.getLocationbyID(req.params.id)
         return res.status(200).send(loc)
@@ -46,7 +47,7 @@ router.get('/locations/:id', async (req, res) => {
 
 // /POST for /locations --> Add a new location using query parameters
 // http://localhost:3000/locations?filmName=Les cités d'or&district=00000
-router.post('/locations', async (req, res) => {
+router.post('/locations', passport.authenticate('auth',{session: false, failureMessage: true}), async (req, res) => {
     try {
         const loc = await locationsService.addLocation(req.query)
         return res.status(200).send(loc)
@@ -58,7 +59,7 @@ router.post('/locations', async (req, res) => {
 // /DELETE for /locations with /:id path variable--> delete the matching location
 // http://localhost:3000/locations/:id
 // id = 63924e75df0409fce6781588
-router.delete('/locations/:id', async (req, res) => {
+router.delete('/locations/:id', passport.authenticate('auth',{session: false, failureMessage: true}), async (req, res) => {
     try {
         const loc = await locationsService.deleteLocationByID(req.params.id)
         return res.status(200).send(loc)
@@ -73,7 +74,7 @@ router.delete('/locations/:id', async (req, res) => {
 // /PUT for /locations with /:id path variable--> update the matching location using query parameters
 // http://localhost:3000/locations/:id?filmName="Albator"&district=11111
 // id = 63924e75df0409fce6781589
-router.put('/locations/:id', async (req, res) => {
+router.put('/locations/:id', passport.authenticate('auth',{session: false, failureMessage: true}), async (req, res) => {
 	try {
 		const loc = await locationsService.updateLocation(req.params.id, req.query)
 		return res.status(200).send(loc)
