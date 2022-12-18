@@ -8,7 +8,7 @@ The goal was to create a simple API using Node.js and Express.js. This API neede
 
 This goal was attained using this model : **Controller/API Layer -> Service -> Mode** for each class in the database.
 
-As for library, only a few were used :
+As for libraries, only a few were used :
 - Express
 - Mongoose
 - Bcrypt
