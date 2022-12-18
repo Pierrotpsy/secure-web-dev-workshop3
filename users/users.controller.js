@@ -27,7 +27,7 @@ router.post('/users/register', async (req, res) => {
     }
 })
 
-// /POST for /users/login --> Adds a new user
+// /POST for /users/login --> Log in an existing user
 // http://localhost:3000//users/login
 // username = pierrotpsy
 // password = pass
@@ -42,7 +42,7 @@ router.post('/users/login', passport.authenticate('login',{session: false, failu
     }
 })
 
-// /GET for /users/me --> Adds a new user
+// /GET for /users/me --> Get current user info
 // http://localhost:3000//users/me
 // token = ?
 router.get('/users/me', passport.authenticate('auth',{session: false, failureMessage: true}), async (req, res) => {
