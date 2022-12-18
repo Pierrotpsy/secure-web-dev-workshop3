@@ -41,3 +41,7 @@ MONGO_URI=mongodb+srv://<username>:<password>@<server name>/?retryWrites=true&w=
 ```
 
 It also contains the JWT Secret used to generate secure JSON Web Tokens.
+
+### SonarCloud
+
+I connected this repository to SonarCloud and fixed the few findings it showed, [here](https://sonarcloud.io/project/overview?id=Pierrotpsy_secure-web-dev-workshop3_4_5) it is.
