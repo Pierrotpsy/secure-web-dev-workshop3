@@ -2,10 +2,10 @@ const User = require('./users.model')
 const bcrypt = require('bcrypt')
 
 function findAll(){
-    return User.find({})
+    return User.find({}).select("-password")
 }
 
-async function findOne(name) {
+async function getUserByName(name) {
     return User.find({username : name})
   }
 
@@ -19,8 +19,8 @@ async function getUserByID(id){
 
 async function addUser(data) {
     try {
-        const hash = await bcrypt.hash(data.password, 10)
-        const user = new User({username: data.username, password: hash})
+        const hash = await bcrypt.hash(data.password, 12)
+        const user = new User({username: data.username, password: hash, role: data.role})
         return await user.save();
     } catch (e) {
         console.log(e)
@@ -38,8 +38,31 @@ async function verifyPassword(name,password){
     }
     return user
 }
+
+async function updateUser(id, data) {
+    try {
+        if(!data.password) {
+            const hash = await bcrypt.hash(data.password, 10)
+            data.password = hash
+        }
+        return User.updateOne({_id: id},{$set: data});
+    } catch (e) {
+        throw new Error("Error when updating")
+    }
+}
+
+async function deleteUser(id) {
+    try {
+        return User.findOneAndDelete({_id:id});
+    } catch (e) {
+        throw new Error("Error when deleting")
+    }
+}
+
 module.exports.addUser = addUser
-module.exports.findOne = findOne
+module.exports.getUserByName = getUserByName
 module.exports.findAll = findAll
 module.exports.verifyPassword = verifyPassword
 module.exports.getUserByID = getUserByID
+module.exports.updateUser = updateUser
+module.exports.deleteUser = deleteUser

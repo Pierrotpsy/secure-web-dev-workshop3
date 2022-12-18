@@ -8,12 +8,16 @@ authStrategy = new JwtStrategy({
     jwtFromRequest: ExtractJWT.fromUrlQueryParameter('token'),
   }, 
     async function(token, done) {
-        if(!token) {
-            return done(null, false)
+        try {
+            if(!token) {
+                return done(null, false)
+            }
+            const user = await userService.getUserByID(token.id)
+            if (!user) { return done(null, false); }
+            return done(null, user);
+        } catch(err) {
+            if(err) { return done(err); }
         }
-        const user = userService.getUserByID(token.id)
-        if (!user) { return done(null, false); }
-        return done(null, true);
     }
 );
 

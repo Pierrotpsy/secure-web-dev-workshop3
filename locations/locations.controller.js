@@ -4,8 +4,11 @@
 const router = require('express').Router()
 const locationsService = require('./locations.service');
 const passport = require("passport");
-const AuthStrategy = require('../passport-strat/AuthStrategy');
+const AuthStrategy = require('../middlewares/AuthStrategy');
+const accessMiddleware = require('../middlewares/AccessMiddleware');
+
 passport.use('auth', AuthStrategy);
+
 //
 // Business logic tested using Postman
 //
@@ -18,6 +21,7 @@ router.get('/', (req, res) => {
 
 // /GET for /locations --> get all the locations 
 // http://localhost:3000/locations
+//token = ?
 router.get('/locations', passport.authenticate('auth',{session: false, failureMessage: true}), async (req, res) => {
     try {
         const loc = await locationsService.getAllLocations()
@@ -33,6 +37,7 @@ router.get('/locations', passport.authenticate('auth',{session: false, failureMe
 // /GET for /locations with /:id path variable --> get the matching location
 // http://localhost:3000/locations/:id
 // id = 63924e75df0409fce6781588
+//token = ?
 router.get('/locations/:id', passport.authenticate('auth',{session: false, failureMessage: true}), async (req, res) => {
     try {
         const loc = await locationsService.getLocationbyID(req.params.id)
@@ -47,7 +52,8 @@ router.get('/locations/:id', passport.authenticate('auth',{session: false, failu
 
 // /POST for /locations --> Add a new location using query parameters
 // http://localhost:3000/locations?filmName=Les cités d'or&district=00000
-router.post('/locations', passport.authenticate('auth',{session: false, failureMessage: true}), async (req, res) => {
+//token = ?
+router.post('/locations', passport.authenticate('auth',{session: false, failureMessage: true}), accessMiddleware.access(['superAdmin','admin']),  async (req, res) => {
     try {
         const loc = await locationsService.addLocation(req.query)
         return res.status(200).send(loc)
@@ -59,7 +65,8 @@ router.post('/locations', passport.authenticate('auth',{session: false, failureM
 // /DELETE for /locations with /:id path variable--> delete the matching location
 // http://localhost:3000/locations/:id
 // id = 63924e75df0409fce6781588
-router.delete('/locations/:id', passport.authenticate('auth',{session: false, failureMessage: true}), async (req, res) => {
+//token = ?
+router.delete('/locations/:id', passport.authenticate('auth',{session: false, failureMessage: true}), accessMiddleware.access(['superAdmin']),async (req, res) => {
     try {
         const loc = await locationsService.deleteLocationByID(req.params.id)
         return res.status(200).send(loc)
@@ -74,7 +81,8 @@ router.delete('/locations/:id', passport.authenticate('auth',{session: false, fa
 // /PUT for /locations with /:id path variable--> update the matching location using query parameters
 // http://localhost:3000/locations/:id?filmName="Albator"&district=11111
 // id = 63924e75df0409fce6781589
-router.put('/locations/:id', passport.authenticate('auth',{session: false, failureMessage: true}), async (req, res) => {
+//token = ?
+router.put('/locations/:id', passport.authenticate('auth',{session: false, failureMessage: true}), accessMiddleware.access(['superAdmin']),async (req, res) => {
 	try {
 		const loc = await locationsService.updateLocation(req.params.id, req.query)
 		return res.status(200).send(loc)
