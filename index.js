@@ -8,6 +8,7 @@ require('dotenv').config()
 
 app.use(userController)
 app.use(locationController)
+app.disable("x-powered-by");
 
 app.listen(port, async () => {
 	await mongoose.connect(process.env.MONGO_URI)
