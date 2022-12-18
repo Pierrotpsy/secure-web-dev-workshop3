@@ -31,7 +31,7 @@ The code can then be tested using a browser and the correct URLs or by using an 
 
 Above each route in the controllers, there is a description of a test done using Postman.
 
-The first thing to do is of course to register a user and to log in to obtain a valid JWT, which can then be used to access most routes, except those for which a specific role is needed. the **superAdmin** role can access every route though.
+The first thing to do is of course to register a user and to log in to obtain a valid JWT, which can then be used to access most routes, except those for which a specific role is needed. the **superAdmin** role can access every route though. The **admin** role was created for testing purposes.
 
 ### Contents
 
